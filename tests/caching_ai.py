@@ -53,10 +53,7 @@ class CachingAI(AI):
         List[Message]
             The updated list of messages in the conversation.
         """
-        """
-        Advances the conversation by sending message history
-        to LLM and updating with the response.
-        """
+
         if prompt:
             messages.append(HumanMessage(content=prompt))
 
@@ -69,9 +66,8 @@ class CachingAI(AI):
 
         messages_key = self.serialize_messages(messages)
         if messages_key not in cache:
-            callbacks = []
             print("calling backoff inference")
-            response = self.backoff_inference(messages, callbacks)
+            response = self.backoff_inference(messages)
             self.token_usage_log.update_log(
                 messages=messages, answer=response.content, step_name=step_name
             )
